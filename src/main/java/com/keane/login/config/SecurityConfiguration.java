@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -13,23 +14,14 @@ public class SecurityConfiguration {
     // Header and frame option is required to allow h2-console to work
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/")).hasRole("USER")
-                .and()
+        return http.authorizeHttpRequests((authorizeHttpRequests)->
+                authorizeHttpRequests
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/")).hasRole("USER"))
                 .csrf(AbstractHttpConfigurer::disable)
-                .headers()
-                .frameOptions()
-                .disable()
-                .and()
-                .formLogin();
-        return http.build();
-    }
-
-    @Bean
-    public SecurityFilterChain logoutFilterChain(HttpSecurity http) throws Exception {
-        http.logout();
-        return http.build();
+                .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+                .formLogin(httpSecurityFormLoginConfigurer -> {})
+                .logout(httpSecurityFormLoginConfigurer -> {}).build();
     }
 
     @Bean

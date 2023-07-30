@@ -22,7 +22,12 @@ public class CustomUserDetailService implements UserDetailsService {
         if (userEntity == null) {
             throw new UsernameNotFoundException(username);
         }
-        UserDetails userDetails = User.withUsername(userEntity.getUserName()).password(userEntity.getPassword()).authorities("USER").roles("USER").build();
+        UserDetails userDetails = User
+                .withUsername(userEntity.getUserName())
+                .password(userEntity.getPassword())
+                .authorities("USER")
+                .roles("USER")
+                .build();
         System.out.println(userDetails);
         return userDetails;
     }

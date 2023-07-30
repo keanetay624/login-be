@@ -8,3 +8,5 @@ spring:
     spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
   h2:
     console.enabled: true
+jwt:
+  secret: "81a0b662bed90dbd805f73c20408c36d351af60ab84f7bb9066994031e8b3811"

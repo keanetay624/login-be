@@ -21,13 +21,11 @@ public class CustomUserDetailService implements UserDetailsService {
                 .findByUserName(username))
                 .get()
                 .orElseThrow(() -> new UsernameNotFoundException(username));
-        UserDetails userDetails = User
+        return User
                 .withUsername(userEntity.getUserName())
                 .password(userEntity.getPassword())
                 .authorities("USER")
                 .roles("USER")
                 .build();
-        System.out.println(userDetails);
-        return userDetails;
     }
 }

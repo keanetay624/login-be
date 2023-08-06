@@ -2,33 +2,40 @@ package com.keane.login.service;
 
 import com.keane.login.entity.UserEntity;
 import com.keane.login.repository.UserRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        final UserEntity userEntity = userRepository.findByUserName(username);
-        if (userEntity == null) {
-            throw new UsernameNotFoundException(username);
-        }
-        UserDetails userDetails = User
+        String roleStringUser = "USER";
+        String roleStringManager = "MANAGER";
+
+        final UserEntity userEntity = Optional.of(userRepository
+                .findByUserName(username))
+                .get()
+                .orElseThrow(() -> new UsernameNotFoundException(username));
+
+        return userEntity.getIsManager() == 0 ? User
                 .withUsername(userEntity.getUserName())
                 .password(userEntity.getPassword())
                 .authorities("USER")
-                .roles("USER")
+                .roles(roleStringUser)
+                .build() : User
+                .withUsername(userEntity.getUserName())
+                .password(userEntity.getPassword())
+                .authorities("USER")
+                .roles(roleStringUser)
+                .roles(roleStringManager)
                 .build();
-        System.out.println(userDetails);
-        return userDetails;
     }
 }

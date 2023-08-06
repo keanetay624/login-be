@@ -18,4 +18,11 @@ public class UserEntity {
     private String password;
     private String fullName;
     private int isManager;
+
+    public UserEntity(String userName, String password, String fullName, int isManager) {
+        this.userName = userName;
+        this.password = password;
+        this.fullName = fullName;
+        this.isManager = isManager;
+    }
 }

@@ -26,7 +26,7 @@ public class SecurityConfiguration {
                 authorizeHttpRequests
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**"),
                                 AntPathRequestMatcher.antMatcher("/authenticate")).permitAll()
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/")).hasRole("USER"))
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/employee/**")).hasRole("USER"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

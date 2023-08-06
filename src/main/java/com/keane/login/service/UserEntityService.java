@@ -1,10 +1,12 @@
 package com.keane.login.service;
 
+import com.keane.login.dto.UserCreateDto;
 import com.keane.login.dto.UserDto;
 import com.keane.login.entity.UserEntity;
 import com.keane.login.exception.UserEntityNotFoundException;
 import com.keane.login.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserEntityService {
     private final UserRepository userRepository;
-    public static final String DEFAULT_PASSWORD = "password$1";
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public UserDto findUserByUsername(String username) {
         UserEntity userEntity = Optional.of(userRepository
@@ -38,8 +40,9 @@ public class UserEntityService {
                 ).collect(Collectors.toList());
     }
 
-    public void addUser(UserDto user) {
-        UserEntity userEntity = new UserEntity(user.getUserName(), DEFAULT_PASSWORD, user.getFullName(), user.getIsManager());
+    public void addUser(UserCreateDto user) {
+        UserEntity userEntity = new UserEntity(user.getUserName(), passwordEncoder.encode(user.getPassword()),
+                user.getFullName(), user.getIsManager());
         userRepository.save(userEntity);
     }
 }

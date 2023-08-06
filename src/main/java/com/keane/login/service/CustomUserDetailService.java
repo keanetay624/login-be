@@ -17,15 +17,25 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        String roleStringUser = "USER";
+        String roleStringManager = "MANAGER";
+
         final UserEntity userEntity = Optional.of(userRepository
                 .findByUserName(username))
                 .get()
                 .orElseThrow(() -> new UsernameNotFoundException(username));
-        return User
+
+        return userEntity.getIsManager() == 0 ? User
                 .withUsername(userEntity.getUserName())
                 .password(userEntity.getPassword())
                 .authorities("USER")
-                .roles("USER")
+                .roles(roleStringUser)
+                .build() : User
+                .withUsername(userEntity.getUserName())
+                .password(userEntity.getPassword())
+                .authorities("USER")
+                .roles(roleStringUser)
+                .roles(roleStringManager)
                 .build();
     }
 }

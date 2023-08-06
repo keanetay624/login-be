@@ -1,6 +1,7 @@
 package com.keane.login.controller;
 
 import com.keane.login.dto.ApiResponse;
+import com.keane.login.dto.UserCreateDto;
 import com.keane.login.dto.UserDto;
 import com.keane.login.service.UserEntityService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,13 @@ public class EmployeeController {
         List<UserDto> users = userService.getAllUsers();
         return new ApiResponse.ApiResponseBuilder(HttpStatus.OK)
                 .setData(users)
+                .build();
+    }
+
+    @PostMapping()
+    public ApiResponse addUser(@RequestBody UserCreateDto user) {
+        userService.addUser(user);
+        return new ApiResponse.ApiResponseBuilder(HttpStatus.CREATED)
                 .build();
     }
 }

@@ -3,6 +3,7 @@ package com.keane.login.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -38,8 +39,9 @@ public class SecurityConfiguration {
                 authorizeHttpRequests
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**"),
                                 AntPathRequestMatcher.antMatcher("/authenticate")).permitAll()
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/employee/**")).hasRole("USER")
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/testy/**")).hasRole("USER"))
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/employee/getAll")).hasRole("MANAGER")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET,"/employee/**")).hasAnyRole("USER","MANAGER")
+                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST,"/employee")).hasRole("MANAGER"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

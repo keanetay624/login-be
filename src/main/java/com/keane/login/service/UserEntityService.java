@@ -15,10 +15,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserEntityService {
     private final UserRepository userRepository;
+    public static final String DEFAULT_PASSWORD = "password$1";
 
     public UserDto findUserByUsername(String username) {
         UserEntity userEntity = Optional.of(userRepository
-                .findByUserName(username)).get().orElseThrow(()-> new UserEntityNotFoundException(username));
+                .findByUserName(username))
+                .get()
+                .orElseThrow(()-> new UserEntityNotFoundException(username));
         return new UserDto(userEntity.getId(),
                 userEntity.getUserName(),
                 userEntity.getFullName(),
@@ -33,5 +36,10 @@ public class UserEntityService {
                     user.getFullName(),
                     user.getIsManager())
                 ).collect(Collectors.toList());
+    }
+
+    public void addUser(UserDto user) {
+        UserEntity userEntity = new UserEntity(user.getUserName(), DEFAULT_PASSWORD, user.getFullName(), user.getIsManager());
+        userRepository.save(userEntity);
     }
 }

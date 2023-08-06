@@ -1,0 +1,2 @@
+drop table if exists user_tbl;
+create table user_tbl (id bigint auto_increment PRIMARY KEY, user_name VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL, full_name VARCHAR(100) NOT NULL, is_manager tinyint NOT NULL);

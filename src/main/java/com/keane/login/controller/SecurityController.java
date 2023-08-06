@@ -1,6 +1,6 @@
 package com.keane.login.controller;
 
-import com.keane.login.dto.ApiResponse;
+import com.keane.login.dto.JwtResponse;
 import com.keane.login.dto.AuthRequest;
 import com.keane.login.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +18,11 @@ public class SecurityController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/authenticate")
-    public ApiResponse authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
+    public JwtResponse authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 
-        return new ApiResponse
-                .ApiResponseBuilder(HttpStatus.OK)
+        return new JwtResponse.JwtResponseBuilder(HttpStatus.OK)
                 .setAccToken(jwtService.generateToken(authRequest.getUsername()))
                 .build();
     }

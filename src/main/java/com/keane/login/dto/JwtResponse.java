@@ -4,42 +4,43 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 @Data
-public class ApiResponse {
+public class JwtResponse {
     private HttpStatus httpStatus;
-    private Object data;
+    private String accToken;
     private String errorMsg;
 
-    private ApiResponse(ApiResponseBuilder builder) {
+    private JwtResponse(JwtResponseBuilder builder) {
         this.httpStatus = builder.httpStatus;
-        this.data = builder.data;
+        this.accToken = builder.accToken;
         this.errorMsg = builder.errorMsg;
     }
 
     // Builder class
-    public static class ApiResponseBuilder {
+    public static class JwtResponseBuilder {
         // required parameters
         private final HttpStatus httpStatus;
 
         // optional parameters
-        private Object data;
+        private String accToken;
         private String errorMsg;
 
-        public ApiResponseBuilder(HttpStatus httpStatus){
+        public JwtResponseBuilder(HttpStatus httpStatus){
             this.httpStatus=httpStatus;
         }
 
-        public ApiResponse.ApiResponseBuilder setData(Object data) {
-            this.data = data;
+        public JwtResponseBuilder setAccToken(String accToken) {
+            this.accToken = accToken;
             return this;
         }
 
-        public ApiResponse.ApiResponseBuilder setErrorMsg(String errorMsg) {
+        public JwtResponseBuilder setErrorMsg(String errorMsg) {
             this.errorMsg = errorMsg;
             return this;
         }
 
-        public ApiResponse build(){
-            return new ApiResponse(this);
+        public JwtResponse build(){
+            return new JwtResponse(this);
         }
     }
+
 }
